@@ -1,8 +1,8 @@
-package miphi.project.controller;
+package miphi.project.service;
 
 import java.util.Scanner;
 
-public class InputUtilController {
+public class InputUtil {
     public static int readIntegerInput(Scanner scanner, String prompt) {
         while (true) {
             try {

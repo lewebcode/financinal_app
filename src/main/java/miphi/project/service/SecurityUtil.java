@@ -1,9 +1,9 @@
-package miphi.project.controller;
+package miphi.project.service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SecurityUtilController {
+public class SecurityUtil {
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

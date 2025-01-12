@@ -1,7 +1,6 @@
-package miphi.project.service;
+package miphi.project.models;
 
 import miphi.project.interfaces.IExecute;
-import miphi.project.models.Wallet;
 
 public class Transfer implements IExecute {
     private final Wallet sender;

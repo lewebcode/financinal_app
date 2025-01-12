@@ -3,15 +3,15 @@ package miphi.project.service;
 import java.util.*;
 
 import miphi.project.Main;
-import miphi.project.controller.InputUtilController;
 import miphi.project.interfaces.*;
+import miphi.project.models.Transfer;
 import miphi.project.models.Wallet;
 
 public class UserMenu {
     public static void userMenu(Scanner scanner, IUser user) {
         while (true) {
             printUserMenu();
-            int choice = InputUtilController.readIntegerInput(scanner, "Выберите опцию: ");
+            int choice = InputUtil.readIntegerInput(scanner, "Выберите опцию: ");
 
             switch (choice) {
                 case 1 -> handleAddIncome(scanner, user.getWallet());
@@ -37,7 +37,7 @@ public class UserMenu {
     }
 
     private static void handleAddIncome(Scanner scanner, Wallet wallet) {
-        double amount = InputUtilController.readDoubleInput(scanner, "Введите сумму дохода: ");
+        double amount = InputUtil.readDoubleInput(scanner, "Введите сумму дохода: ");
         if (amount <= 0) {
             System.out.println("Неверная сумма. Доход должен быть положительным.");
             return;
@@ -47,7 +47,7 @@ public class UserMenu {
     }
 
     private static void handleAddExpense(Scanner scanner, Wallet wallet) {
-        double amount = InputUtilController.readDoubleInput(scanner, "Введите сумму расхода: ");
+        double amount = InputUtil.readDoubleInput(scanner, "Введите сумму расхода: ");
         if (amount <= 0) {
             System.out.println("Неверная сумма. Расход должен быть положительным.");
             return;
@@ -68,7 +68,7 @@ public class UserMenu {
             return;
         }
 
-        double amount = InputUtilController.readDoubleInput(scanner, "Введите сумму перевода: ");
+        double amount = InputUtil.readDoubleInput(scanner, "Введите сумму перевода: ");
         Transfer transfer = new Transfer(sender.getWallet(), recipient.getWallet(), amount);
         if (transfer.execute()) {
             System.out.println("Перевод успешно выполнен.");

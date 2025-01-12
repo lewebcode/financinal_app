@@ -1,7 +1,7 @@
 package miphi.project;
 
-import miphi.project.controller.InputUtilController;
-import miphi.project.controller.SecurityUtilController;
+import miphi.project.service.InputUtil;
+import miphi.project.service.SecurityUtil;
 import miphi.project.models.User;
 import miphi.project.service.UserMenu;
 
@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         while (true) {
             printMainMenu();
-            int choice = InputUtilController.readIntegerInput(scanner, "Выберите опцию: ");
+            int choice = InputUtil.readIntegerInput(scanner, "Выберите опцию: ");
 
             switch (choice) {
                 case 1 -> registerUser();
@@ -50,7 +50,7 @@ public class Main {
             return;
         }
 
-        String hashedPassword = SecurityUtilController.hashPassword(password);
+        String hashedPassword = SecurityUtil.hashPassword(password);
         users.put(username, new User(username, hashedPassword));
         System.out.println("Регистрация успешна.");
     }
@@ -61,7 +61,7 @@ public class Main {
 
         System.out.print("Введите пароль: ");
         String password = scanner.nextLine().trim();
-        String hashedPassword = SecurityUtilController.hashPassword(password);
+        String hashedPassword = SecurityUtil.hashPassword(password);
 
         User user = users.get(username);
         if (user == null || !user.verifyPassword(hashedPassword)) {
