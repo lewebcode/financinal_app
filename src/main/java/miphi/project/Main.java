@@ -1,15 +1,19 @@
 package miphi.project;
 
-import miphi.project.service.InputUtil;
-import miphi.project.service.SecurityUtil;
+import miphi.project.services.InputUtil;
+import miphi.project.services.SecurityUtil;
 import miphi.project.models.User;
-import miphi.project.service.UserMenu;
+import miphi.project.services.UserMenu;
 
 import java.util.*;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     public static final Map<String, User> users = new HashMap<>();
+
+    public static Map<String, User> getUsers() {
+        return users;
+    }
 
     public static void main(String[] args) {
         while (true) {

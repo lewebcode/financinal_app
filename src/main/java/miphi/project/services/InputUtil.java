@@ -1,4 +1,4 @@
-package miphi.project.service;
+package miphi.project.services;
 
 import java.util.Scanner;
 
