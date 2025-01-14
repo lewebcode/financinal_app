@@ -27,20 +27,4 @@ public class User implements IUser {
     public String getUsername() {
         return username;
     }
-
-    /**
-     * Перевод средств от текущего пользователя другому пользователю.
-     *
-     * @param recipient получатель средств.
-     * @param amount    сумма перевода.
-     * @return true, если перевод успешно выполнен.
-     */
-    public boolean transferFunds(User recipient, double amount) {
-        if (wallet.getBalance() < amount) {
-            return false;
-        }
-        wallet.addExpense("Перевод: " + recipient.getUsername(), amount);
-        recipient.getWallet().addIncome("Перевод от: " + username, amount);
-        return true;
-    }
 }
