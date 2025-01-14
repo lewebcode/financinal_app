@@ -3,10 +3,13 @@ package miphi.project.services;
 import java.util.*;
 
 import miphi.project.Main;
+import miphi.project.models.Transfer;
 import miphi.project.models.User;
 import miphi.project.models.Wallet;
 
 public class UserMenu {
+    private static final Transfer transferService = new Transfer();
+
     public static void userMenu(Scanner scanner, User currentUser) {
         while (true) {
             printUserMenu();
@@ -19,7 +22,8 @@ public class UserMenu {
                 case 4 -> displayStatistics(currentUser.getWallet());
                 case 5 -> handleSetBudget(scanner, currentUser.getWallet());
                 case 6 -> handleTransferFunds(scanner, currentUser);
-                case 7 -> {
+                case 7 -> displayTransferHistory();
+                case 8 -> {
                     System.out.println("Выход из аккаунта...");
                     return;
                 }
@@ -36,7 +40,8 @@ public class UserMenu {
         System.out.println("4. Посмотреть статистику бюджета");
         System.out.println("5. Установить бюджет");
         System.out.println("6. Перевести средства");
-        System.out.println("7. Выйти");
+        System.out.println("7. История переводов");
+        System.out.println("8. Выйти");
     }
 
     private static void handleTransferFunds(Scanner scanner, User sender) {
@@ -46,23 +51,26 @@ public class UserMenu {
         System.out.print("Введите сумму для перевода: ");
         double amount = InputUtil.readDoubleInput(scanner, "Сумма: ");
 
-        // Здесь предполагается, что существует метод для поиска пользователя
         User recipient = findUserByName(recipientName);
         if (recipient == null) {
             System.out.println("Пользователь не найден.");
             return;
         }
 
-        if (sender.transferFunds(recipient, amount)) {
+        if (transferService.execute(sender, recipient, amount)) {
             System.out.printf("Успешный перевод %.2f от %s к %s.%n", amount, sender.getUsername(), recipient.getUsername());
         } else {
-            System.out.println("Не удалось выполнить перевод. Проверьте баланс.");
+            System.out.println("Перевод не удался.");
         }
     }
 
+    private static void displayTransferHistory() {
+        System.out.println("\nИстория переводов:");
+        transferService.getHistory().forEach(System.out::println);
+    }
+
     private static User findUserByName(String name) {
-        // Примерная логика; предполагается, что список пользователей доступен глобально
-        return Main.getUsers().get(name); // Используйте свою структуру хранения пользователей
+        return Main.getUsers().get(name);
     }
 
     private static void handleAddIncome(Scanner scanner, Wallet wallet) {
@@ -95,6 +103,11 @@ public class UserMenu {
     private static void displayStatistics(Wallet wallet) {
         System.out.printf("Общий доход: %.2f%n", wallet.getTotalIncome());
         System.out.printf("Общие расходы: %.2f%n", wallet.getTotalExpenses());
-        wallet.displayBudgets();
+
+        System.out.println("Бюджет по категориям:");
+        Map<String, Double> remainingBudgets = wallet.calculateRemainingBudgets();
+        for (Map.Entry<String, Double> entry : remainingBudgets.entrySet()) {
+            System.out.printf("Категория: %s, Оставшийся бюджет: %.2f%n", entry.getKey(), entry.getValue());
+        }
     }
 }

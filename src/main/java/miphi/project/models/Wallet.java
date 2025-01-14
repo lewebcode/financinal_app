@@ -10,33 +10,39 @@ public class Wallet implements IWallet {
     private final List<Income> incomes = new ArrayList<>();
     private final Map<String, Double> budgets = new HashMap<>();
 
-    @Override
     public double getBalance() {
         return balance;
     }
 
-    @Override
-    public void addIncome(String category, double amount) {
-        incomes.add(new Income(category, amount));
+    public void increaseBalance(double amount) {
         balance += amount;
     }
 
-    @Override
-    public boolean addExpense(String category, double amount) {
+    public boolean decreaseBalance(double amount) {
         if (amount > balance) {
             return false;
         }
-        expenses.add(new Expense(category, amount));
         balance -= amount;
         return true;
     }
 
-    @Override
+    public void addIncome(String category, double amount) {
+        incomes.add(new Income(category, amount));
+        increaseBalance(amount);
+    }
+
+    public boolean addExpense(String category, double amount) {
+        if (!decreaseBalance(amount)) {
+            return false;
+        }
+        expenses.add(new Expense(category, amount));
+        return true;
+    }
+
     public void setBudget(String category, double budget) {
         budgets.put(category, budget);
     }
 
-    @Override
     public Map<String, Double> calculateRemainingBudgets() {
         Map<String, Double> remainingBudgets = new HashMap<>(budgets);
 
@@ -49,21 +55,11 @@ public class Wallet implements IWallet {
         return remainingBudgets;
     }
 
-    @Override
     public double getTotalIncome() {
         return incomes.stream().mapToDouble(Income::getAmount).sum();
     }
 
-    @Override
     public double getTotalExpenses() {
         return expenses.stream().mapToDouble(Expense::getAmount).sum();
-    }
-
-    public void displayBudgets() {
-        System.out.println("Бюджеты по категориям:");
-        budgets.forEach((category, budget) -> {
-            double remaining = calculateRemainingBudgets().getOrDefault(category, budget);
-            System.out.printf("%s: Установлено %.2f, Остаток %.2f%n", category, budget, remaining);
-        });
     }
 }
